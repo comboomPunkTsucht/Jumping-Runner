@@ -11,6 +11,8 @@
 .mtj.tmp/
 
 #ausname
+!src/lib/*/*.zip
+!src/lib/*/*.jar
 !src/lib/*.zip
 !src/lib/*.jar
 
@@ -26,3 +28,4 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+src/lib/lwjgl-release-3.3.4-custom.zip
