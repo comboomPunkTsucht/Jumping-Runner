@@ -11,9 +11,10 @@ permissions:
   contents: write
 
 on:
+  # Will run on every push in the "main" branch
   push:
-    tags:
-      - '*'
+    branches:
+      - main
 
 jobs:
   build:
@@ -38,12 +39,15 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
+    - name: Uploade
+      uses: Fulminazzo/java-automatic-release@v2
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: lwjgl3/build/libs/*
-        tag: ${{ github.ref }}
-        overwrite: true
+      # The Java version to use when setting up Java.
+        java-version: 21 # optional, default is 11
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+          # Message specified in the commit
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
     
           
