@@ -10,9 +10,11 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - "main"
-      - "pre"
       - "dev"
+  pull_request:
+    branches:
+      - "pre"
+      - "main"
 
 jobs:
   build:
