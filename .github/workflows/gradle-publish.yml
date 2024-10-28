@@ -70,9 +70,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "${{ env.VERSION }}"
+          tag_name: ${{ env.VERSION }}       # Correctly references VERSION
           release_name: "${{ env.VERSION }}"
-          prerelease: "${{ env.PRERELEASE }}"
+          prerelease: ${{ env.PRERELEASE }}
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -80,6 +80,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "${{ env.JAR_PATH }}"
+          asset_path: ${{ env.JAR_PATH }}
           asset_name: "Jumping-Runner.jar"
           asset_content_type: application/java-archive
