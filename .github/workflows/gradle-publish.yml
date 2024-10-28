@@ -9,7 +9,6 @@ on:
       - 'main' # Trigger on the 'main' branch
       - 'pre'  # Trigger on the 'pre' branch
 
-
 jobs:
   release:
     runs-on: ubuntu-latest
