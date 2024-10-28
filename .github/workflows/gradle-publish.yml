@@ -8,10 +8,6 @@ on:
     branches:
       - 'main' # Trigger on the 'main' branch
       - 'pre'  # Trigger on the 'pre' branch
-  pull_request:
-    branches:
-      - 'main' # Trigger on the 'main' branch
-      - 'pre'  # Trigger on the 'pre' branch
 
 jobs:
   release:
