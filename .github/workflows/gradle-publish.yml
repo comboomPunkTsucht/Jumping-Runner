@@ -6,7 +6,12 @@ permissions:
 on:
   push:
     branches:
-      - 'main'
+      - 'main' # Trigger on the 'main' branch
+      - 'pre'  # Trigger on the 'pre' branch
+  pull_request:
+    branches:
+      - 'main' # Trigger on the 'main' branch
+      - 'pre'  # Trigger on the 'pre' branch
 
 jobs:
   release:
@@ -37,14 +42,18 @@ jobs:
           VERSION=$(grep "^projectVersion=" gradle.properties | cut -d'=' -f2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # Check if it's a pre-release based on '-pre' in the version
-      - name: Check if Pre-release
-        id: check_prerelease
+      # Set PRERELEASE and adjust version for pre-release
+      - name: Determine Pre-release Status
+        id: determine_prerelease
         run: |
-          if [[ "${{ env.VERSION }}" == *"-pre" ]]; then
+          if [[ "${GITHUB_REF##*/}" == "pre" ]]; then
             echo "PRERELEASE=true" >> $GITHUB_ENV
+            echo "RELEASE_NAME=${{ env.VERSION }}-pre" >> $GITHUB_ENV
+            echo "TAG_NAME=${{ env.VERSION }}-pre" >> $GITHUB_ENV
           else
             echo "PRERELEASE=false" >> $GITHUB_ENV
+            echo "RELEASE_NAME=${{ env.VERSION }}" >> $GITHUB_ENV
+            echo "TAG_NAME=${{ env.VERSION }}" >> $GITHUB_ENV
           fi
 
       # Define the JAR file path based on the version
@@ -66,8 +75,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
-          release_name: "${{ env.VERSION }}"
+          tag_name: ${{ env.TAG_NAME }}       # Use the modified tag name
+          release_name: ${{ env.RELEASE_NAME }}  # Use the modified release name
           prerelease: ${{ env.PRERELEASE }}
 
       # Upload Release Asset
