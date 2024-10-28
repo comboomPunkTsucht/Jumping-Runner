@@ -47,6 +47,18 @@ jobs:
             echo "PRERELEASE=false" >> $GITHUB_ENV
           fi
 
+      # Define the JAR file path based on the version
+      - name: Set JAR Path
+        id: set_jar_path
+        run: |
+          JAR_PATH="./lwjgl3/build/libs/Jumping Runner-${{ env.VERSION }}.jar"
+          if [[ -f "$JAR_PATH" ]]; then
+            echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
+          else
+            echo "Error: $JAR_PATH does not exist." >&2
+            exit 1
+          fi
+
       # Create a new GitHub release
       - name: Create GitHub Release
         id: create_release
@@ -55,7 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ env.VERSION }}"
-          release_name: "${{ env.VERSION }}"  # Use `release_name` instead of `name`
+          release_name: "${{ env.VERSION }}"
           prerelease: "${{ env.PRERELEASE }}"
 
       # Upload the .jar file to the release
@@ -64,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: "${{ steps.create_release.outputs.upload_url }}"  # Ensure the correct output variable
-          asset_path: "./lwjgl3/build/libs/*.jar"
-          asset_name: "Jumping-Runner.jar" # Optionally customize the name
+          upload_url: "${{ steps.create_release.outputs.upload_url }}"
+          asset_path: "${{ env.JAR_PATH }}"
+          asset_name: "Jumping-Runner.jar"
           asset_content_type: application/java-archive
