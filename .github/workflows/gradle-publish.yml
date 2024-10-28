@@ -49,12 +49,13 @@ jobs:
 
       # Create a new GitHub release
       - name: Create GitHub Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ env.VERSION }}"
-          name: "${{ env.VERSION }}"  # Replaces `release_name` with `name`
+          release_name: "${{ env.VERSION }}"  # Use `release_name` instead of `name`
           prerelease: "${{ env.PRERELEASE }}"
 
       # Upload the .jar file to the release
@@ -63,7 +64,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          upload_url: "${{ steps.create_release.outputs.upload_url }}"  # Ensure the correct output variable
           asset_path: "./lwjgl3/build/libs/*.jar"
           asset_name: "Jumping-Runner.jar" # Optionally customize the name
           asset_content_type: application/java-archive
