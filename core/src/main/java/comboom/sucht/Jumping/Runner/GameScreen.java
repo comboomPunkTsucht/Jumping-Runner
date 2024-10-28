@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
         music.setVolume(0.5F);
 
         bucketSprite = new Sprite(bucketTexture);
-        bucketSprite.setSize(1, 1);
+        bucketSprite.setSize(120, 120);
 
         touchPos = new Vector2();
 
@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
     }
 
     private void input() {
-        float speed = 4f;
+        float speed = 576f;
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -101,7 +101,7 @@ public class GameScreen implements Screen {
             float dropWidth = dropSprite.getWidth();
             float dropHeight = dropSprite.getHeight();
 
-            dropSprite.translateY(-2f * delta);
+            dropSprite.translateY(-2f * delta*120);
             dropRectangle.set(dropSprite.getX(), dropSprite.getY(), dropWidth, dropHeight);
 
             if (dropSprite.getY() < -dropHeight) dropSprites.removeIndex(i);
@@ -131,7 +131,7 @@ public class GameScreen implements Screen {
         game.batch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
         bucketSprite.draw(game.batch);
 
-        game.font.draw(game.batch, "Drops collected: " + dropsGathered, 0, worldHeight);
+        game.getFont("CaskaydiaCoveNerdFontPropo-SemiBold.ttf").draw(game.batch, "Drops collected: " + dropsGathered, 0, worldHeight);
 
         for (Sprite dropSprite : dropSprites) {
             dropSprite.draw(game.batch);
@@ -141,8 +141,8 @@ public class GameScreen implements Screen {
     }
 
     private void createDroplet() {
-        float dropWidth = 1;
-        float dropHeight = 1;
+        float dropWidth = 120;
+        float dropHeight = 120;
         float worldWidth = game.viewport.getWorldWidth();
         float worldHeight = game.viewport.getWorldHeight();
 
