@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -24,8 +21,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          server-id: github
-          settings-path: ${{ github.workspace }}
 
       # Setup Gradle
       - name: Setup Gradle
@@ -42,7 +37,7 @@ jobs:
           VERSION=$(grep "^projectVersion=" gradle.properties | cut -d'=' -f2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # Determine if the version is a pre-release by checking for `-pre`
+      # Check if it's a pre-release
       - name: Check if Pre-release
         id: check_prerelease
         run: |
@@ -52,13 +47,23 @@ jobs:
             echo "PRERELEASE=false" >> $GITHUB_ENV
           fi
 
-      # Create GitHub Release
+      # Create a new GitHub release
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ env.VERSION }}"
           name: "${{ env.VERSION }}"  # Replaces `release_name` with `name`
           prerelease: "${{ env.PRERELEASE }}"
-          files: "lwjgl3/build/libs/*.jar"
+
+      # Upload the .jar file to the release
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: "./lwjgl3/build/libs/*.jar"
+          asset_name: "Jumping-Runner.jar" # Optionally customize the name
+          asset_content_type: application/java-archive
