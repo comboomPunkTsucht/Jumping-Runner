@@ -45,6 +45,5 @@ jobs:
         file: lwjgl3/build/libs/*
         tag: ${{ github.ref }}
         overwrite: true
-        file_glob: true
     
           
