@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /** First screen of the application. Displayed after the application is created. */
 public class Main implements ApplicationListener {
-    final MyColor color = new MyColor();
 
     Vector2 touchPos;
 
@@ -122,7 +121,7 @@ public class Main implements ApplicationListener {
     }
 
     private void draw() {
-        ScreenUtils.clear(color.black());
+        ScreenUtils.clear(MyColor.BLACK);
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();

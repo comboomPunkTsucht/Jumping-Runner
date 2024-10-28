@@ -1,6 +1,6 @@
 package comboom.sucht.Jumping.Runner;
 
-final public class MyColor extends com.badlogic.gdx.graphics.Color {
+ public class MyColor extends com.badlogic.gdx.graphics.Color {
 
     // Constructor for RGBA values
     MyColor(float r, float g, float b, float a) {
@@ -85,28 +85,28 @@ final public class MyColor extends com.badlogic.gdx.graphics.Color {
         return color;
     }
 
-    // Predefined Nord palette colors
-    public  MyColor black() { return hextoRGBA("#30343F"); }
-    public  MyColor red() { return hextoRGBA("#CF2A31"); }
-    public  MyColor green() { return hextoRGBA("#7BBAA8"); }
-    public  MyColor yellow() { return hextoRGBA("#EFBF6A"); }
-    public  MyColor blue() { return hextoRGBA("#63A2CA"); }
-    public  MyColor magenta() { return hextoRGBA("#C1AC9E"); }
-    public  MyColor cyan() { return hextoRGBA("#F0C9D0"); }
-    public  MyColor white() { return hextoRGBA("#EBEFF1"); }
+    // Predefined Nord palette colors methods
+    private static MyColor black() { return hextoRGBA("#30343F"); }
+    private static MyColor red() { return hextoRGBA("#CF2A31"); }
+    private static MyColor green() { return hextoRGBA("#7BBAA8"); }
+    private static MyColor yellow() { return hextoRGBA("#EFBF6A"); }
+    private static MyColor blue() { return hextoRGBA("#63A2CA"); }
+    private static MyColor magenta() { return hextoRGBA("#C1AC9E"); }
+    private static MyColor cyan() { return hextoRGBA("#F0C9D0"); }
+    private static MyColor white() { return hextoRGBA("#EBEFF1"); }
 
     // Bright (high-intensity) colors
-    public  MyColor brightBlack() { return hextoRGBA("#4D4E59"); }
-    public  MyColor brightRed() { return hextoRGBA("#CF2A31"); }
-    public  MyColor brightGreen() { return hextoRGBA("#7BBAA8"); }
-    public  MyColor brightYellow() { return hextoRGBA("#EFBF6A"); }
-    public  MyColor brightBlue() { return hextoRGBA("#63A2CA"); }
-    public  MyColor brightMagenta() { return hextoRGBA("#BD8A9B"); }
-    public  MyColor brightCyan() { return hextoRGBA("#F0C9D0"); }
-    public  MyColor brightWhite() { return hextoRGBA("#EBEFF1"); }
+    private static MyColor brightBlack() { return hextoRGBA("#4D4E59"); }
+    private static MyColor brightRed() { return hextoRGBA("#CF2A31"); }
+    private static MyColor brightGreen() { return hextoRGBA("#7BBAA8"); }
+    private static MyColor brightYellow() { return hextoRGBA("#EFBF6A"); }
+    private static MyColor brightBlue() { return hextoRGBA("#63A2CA"); }
+    private static MyColor brightMagenta() { return hextoRGBA("#BD8A9B"); }
+    private static MyColor brightCyan() { return hextoRGBA("#F0C9D0"); }
+    private static MyColor brightWhite() { return hextoRGBA("#EBEFF1"); }
 
     // Returns an array of all predefined colors
-    public  MyColor[] getAllColors() {
+    private static MyColor[] getAllColors() {
         return new MyColor[]{
             black(), red(), green(), yellow(), blue(),
             magenta(), cyan(), white(),
@@ -114,4 +114,24 @@ final public class MyColor extends com.badlogic.gdx.graphics.Color {
             brightBlue(), brightMagenta(), brightCyan(), brightWhite()
         };
     }
+     // Predefined Nord palette colors
+    static final public MyColor BLACK = black();
+    static final public MyColor RED = red();
+    static final public MyColor GREEN = green();
+    static final public MyColor YELLOW = yellow();
+    static final public MyColor BLUE = blue();
+    static final public MyColor MAGENTA = magenta();
+    static final public MyColor CYAN = cyan();
+    static final public MyColor WHITE = white();
+     // Bright (high-intensity) colors
+    static final public MyColor BRIGHT_BLACK = brightBlack();
+    static final public MyColor BRIGHT_RED = brightRed();
+    static final public MyColor BRIGHT_GREEN = brightGreen();
+    static final public MyColor BRIGHT_YELLOW = brightYellow();
+    static final public MyColor BRIGHT_BLUE = brightBlue();
+    static final public MyColor BRIGHT_MAGENTA = brightMagenta();
+    static final public MyColor BRIGHT_CYAN = brightCyan();
+    static final public MyColor BRIGHT_WHITE = brightWhite();
+     // array of all predefined colors
+    static final public MyColor[] ALL_COLORS = getAllColors();
 }
