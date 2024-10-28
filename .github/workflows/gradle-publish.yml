@@ -1,4 +1,4 @@
-name: Gradle Package
+name: Release Jar
 
 permissions:
   contents: write
@@ -59,6 +59,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ env.VERSION }}"
-          release_name: "${{ env.VERSION }}"
+          name: "${{ env.VERSION }}"  # Replaces `release_name` with `name`
           prerelease: "${{ env.PRERELEASE }}"
           files: "lwjgl3/build/libs/*.jar"
