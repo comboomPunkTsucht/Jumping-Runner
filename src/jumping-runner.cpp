@@ -135,7 +135,6 @@ int main(void) {
 
             game.score++;
         }
-
         BeginDrawing();
         ClearBackground(GetColor(NORD_BACKGROUND));
 
