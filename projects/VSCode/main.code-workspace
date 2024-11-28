@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../../src"
+		},
+		{
+			"path": "../../.github"
+		},
+		{
+			"path": "../../assets"
 		}
 	],
 	"settings": {

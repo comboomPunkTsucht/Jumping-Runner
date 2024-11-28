@@ -31,9 +31,9 @@ PLATFORM              ?= PLATFORM_DESKTOP
 # Define project variables
 PROJECT_NAME          ?= jumping-runner
 PROJECT_VERSION       ?= 1.0
-PROJECT_BUILD_PATH    ?= .
+PROJECT_BUILD_PATH    ?= $(shell pwd)
 PROJECT_SOURCE_FILES  ?= jumping-runner.cpp
-PROJECT_CUSTOM_FLAGS  = -std=c++11
+PROJECT_CUSTOM_FLAGS  = -std=c++17 -lc++
 
 RAYLIB_SRC_PATH       ?= ./external/raylib/src
 RAYLIB_INCLUDE_PATH   ?= $(RAYLIB_SRC_PATH)
@@ -321,10 +321,8 @@ all:
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
-    @echo "Building raylib..."
-	$(MAKE) -C $(RAYLIB_LIB_PATH) RAYLIB_LIBTYPE=SHARED
-	@echo "Building $(PROJECT_NAME)..."
 	$(CC) -o $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)$(EXT) $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
 %.o: %.c
