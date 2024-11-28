@@ -66,3 +66,4 @@ dkms.conf
 #executibles
 *.exe
 */jumping-runner
+src/jumping-runner
