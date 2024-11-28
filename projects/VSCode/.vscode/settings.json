@@ -7,5 +7,29 @@
 		"**/.DS_Store": true,
 		"**/*.o": true,
 		"**/*.exe": true,
+	},
+	"IDX.aI.enableInlineCompletion": true,
+	"IDX.aI.enableCodebaseIndexing": true,
+	"editor.defaultFormatter": "biomejs.biome",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"quik.biome": "explicit"
+	},
+	"[c]": {
+		"editor.defaultFormatter": "c-plus-plus.cpptools"
+	},
+	"[cpp]": {
+        "editor.defaultFormatter": "c-plus-plus.cpptools"
+    },
+	"[h]": {
+		"editor.defaultFormatter": "c-plus-plus.cpptools"
+	},
+	"[hpp]":{
+		"editor.defaultFormatter": "c-plus-plus.cpptools"
+	},
+	"[makefile]": {
+		"editor.defaultFormatter": "ms-vscode.makefile-tools",
+		"editor.tabSize": 4,
+		"editor.insertSpaces": false
 	}
 }
