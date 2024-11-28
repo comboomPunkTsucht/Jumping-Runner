@@ -155,7 +155,7 @@ int main(void) {
                   {10, 10}, 20, 2, GetColor(NORD_WHITE));
 
         if (game.gameOver) {
-            const char* gameOverText = "Game Over!\nClick to restart";
+            const char* gameOverText = "Game Over!\nClick to restart!";
             Vector2 textSize = MeasureTextEx(gameFont, gameOverText, 40, 2);
             DrawTextEx(gameFont, gameOverText,
                       {GetScreenWidth()/2 - textSize.x/2,
