@@ -1,4 +1,10 @@
-#include "raylib.h"
+#include <raylib.h>
+#include <raymath.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
+#include <string.h>
 #include "nord-color.hpp"
 
 #define SREEN_WIDTH     1920
