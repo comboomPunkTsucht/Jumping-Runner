@@ -335,10 +335,7 @@ endif
 # NOTE: This pattern will compile every module defined on $(OBJS)
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
-    ifeq ($(PLATFORM_OS),OSX)
-	    @echo "Setting up runtime path for macOS..."
-	    install_name_tool -add_rpath "@executable_path/$(RAYLIB_LIB_PATH)" $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)
-    endif
+
 
 # Clean everything
 clean:
