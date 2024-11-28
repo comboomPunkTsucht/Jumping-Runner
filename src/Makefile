@@ -321,18 +321,16 @@ all:
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
-	@echo "Building raylib..."
-	$(MAKE) -C $(RAYLIB_LIB_PATH)  RAYLIB_LIBTYPE=SHARED RAYLIB_RELEASE_PATH=$(PROJECT_BUILD_PATH) PLATFORM=$(PLATFORM)
-	@echo "Building $(PROJECT_NAME)..."
 	$(CC) -o $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)$(EXT) $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
-ifeq ($(PLATFORM_OS),OSX)
-	@echo "Setting up runtime path for macOS..."
-	install_name_tool -add_rpath "$(PROJECT_BUILD_PATH)" $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)
-endif
+
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
+    ifeq ($(PLATFORM_OS),OSX)
+	    @echo "Setting up runtime path for macOS..."
+	    install_name_tool -add_rpath "@executable_path/$(RAYLIB_LIB_PATH)" $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)
+    endif
 
 # Clean everything
 clean:
