@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../../src"
+		},
+		{
+			"path": "../../.github"
+		},
+		{
+			"path": "../../assets"
 		}
 	],
 	"settings": {
@@ -14,6 +20,7 @@
 			"blocks.h": "c",
 			"stdio.h": "c",
 			"*.m": "c"
-		}
+		},
+		"files.autoSave": "onFocusChange"
 	}
 }

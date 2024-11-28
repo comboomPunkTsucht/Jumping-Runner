@@ -31,16 +31,16 @@ PLATFORM              ?= PLATFORM_DESKTOP
 # Define project variables
 PROJECT_NAME          ?= jumping-runner
 PROJECT_VERSION       ?= 1.0
-PROJECT_BUILD_PATH    ?= .
+PROJECT_BUILD_PATH    ?= $(shell pwd)
 PROJECT_SOURCE_FILES  ?= jumping-runner.cpp
-PROJECT_CUSTOM_FLAGS  = -std=c++11
+PROJECT_CUSTOM_FLAGS  = -std=c++17 -lc++
 
 RAYLIB_SRC_PATH       ?= ./external/raylib/src
 RAYLIB_INCLUDE_PATH   ?= $(RAYLIB_SRC_PATH)
 RAYLIB_LIB_PATH       ?= $(RAYLIB_SRC_PATH)
 
 # Library type used for raylib: STATIC (.a) or SHARED (.so/.dll)
-RAYLIB_LIBTYPE        ?= STATIC
+RAYLIB_LIBTYPE        ?= SHARED
 
 # Define compiler path on Windows
 COMPILER_PATH         ?= /Applications/Xcode.app/Contents/Developer/usr/bin
@@ -327,6 +327,10 @@ $(PROJECT_NAME): $(OBJS)
 # NOTE: This pattern will compile every module defined on $(OBJS)
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
+    ifeq ($(PLATFORM_OS),OSX)
+	    @echo "Setting up runtime path for macOS..."
+	    install_name_tool -add_rpath "@executable_path/$(RAYLIB_LIB_PATH)" $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)
+    endif
 
 # Clean everything
 clean:
@@ -339,7 +343,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 		rm -fv *.o
     endif
     ifeq ($(PLATFORM_OS),OSX)
-		rm -f *.o external/*.o $(PROJECT_NAME)
+		rm -f *.o external/*.o $(PROJECT_NAME) && install_name_tool -add_rpath "$(pwd)/external/raylib/src" $(pwd)/jumping-runner;
     endif
 endif
 ifeq ($(PLATFORM),PLATFORM_DRM)
