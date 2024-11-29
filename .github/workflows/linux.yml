@@ -22,7 +22,6 @@ jobs:
       PROJECT_BUILD_PATH: ${{ github.event.repository.name }}/src
       PROJECT_RELEASE_PATH: ${{ github.event.repository.name }}_dev_linux_${{ matrix.arch }}
       PROJECT_RESOURCES_PATH: resources
-      RAYLIB_PATH: external/raylib/src
 
     steps:
       - name: Checkout this repo
