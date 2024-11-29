@@ -35,6 +35,9 @@
 *.i*86
 *.x86_64
 *.hex
+# Executables without an extension
+*
+!*.*
 
 # Debug files
 *.dSYM/
@@ -62,8 +65,3 @@ dkms.conf
 
 # Build folder
 [Bb]uild
-
-#executibles
-*.exe
-*/jumping-runner
-src/jumping-runner
