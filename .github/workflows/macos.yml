@@ -30,6 +30,11 @@ jobs:
         with:
           path: ${{ env.PROJECT_NAME }}
 
+      - name: Initialize and Update Submodules
+        run: |
+          cd ${{ env.PROJECT_NAME }}
+          git submodule update --init --recursive
+
       - name: Setup Release Paths
         if: github.event_name == 'release' && github.event.action == 'published'
         run: |
