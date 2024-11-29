@@ -29,7 +29,8 @@
 	},
 	"[makefile]": {
 		"editor.defaultFormatter": "ms-vscode.makefile-tools",
-		"editor.tabSize": 4,
-		"editor.insertSpaces": false
-	}
+	},
+	"cmake.ignoreCMakeListsMissing": true,
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false
 }
