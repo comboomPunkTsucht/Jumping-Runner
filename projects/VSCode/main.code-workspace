@@ -19,7 +19,11 @@
 			"math.h": "c",
 			"blocks.h": "c",
 			"stdio.h": "c",
-			"*.m": "c"
+			"*.m": "c",
+			"*.c": "c",
+			"*.cpp": "cpp",
+			"*.h": "c",
+			"*.hpp": "cpp",
 		},
 		"files.autoSave": "onFocusChange"
 	}

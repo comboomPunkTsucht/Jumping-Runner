@@ -6,33 +6,70 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         arch: [x64, arm64]
-    runs-on: ubuntu-latest
     env:
       PROJECT_NAME: ${{ github.event.repository.name }}
-      ARCH: ${{ matrix.arch }}
+      PROJECT_BUILD_PATH: ${{ github.event.repository.name }}/src
+      PROJECT_RELEASE_PATH: ${{ github.event.repository.name }}_dev_linux_${{ matrix.arch }}
+      PROJECT_RESOURCES_PATH: resources
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout this repo
+        uses: actions/checkout@master
+        with:
+          path: ${{ env.PROJECT_NAME }}
 
-      - name: Install Dependencies
+      - name: Setup Release Paths
+        if: github.event_name == 'release' && github.event.action == 'published'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu
-          sudo apt-get install -y libglfw3-dev libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev
+          echo "PROJECT_RELEASE_PATH=${{ env.PROJECT_NAME }}_v${{ github.event.release.tag_name }}_linux_${{ matrix.arch }}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Setup Environment
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libglfw3 libglfw3-dev libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxext-dev libxfixes-dev
+          mkdir ${{ env.PROJECT_RELEASE_PATH }}
+
+      - name: Clean Previous Builds
+        run: |
+          cd ${{ env.PROJECT_BUILD_PATH }}
+          make clean PLATFORM=PLATFORM_DESKTOP
+          rm -f ${{ env.PROJECT_NAME }} *.o *.a *.so *.dll *.dylib
 
       - name: Build Project
         run: |
-          cd src
-          make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=STATIC ARCH=${{ matrix.arch }}
+          cd ${{ env.PROJECT_BUILD_PATH }}
+          make PLATFORM=PLATFORM_DESKTOP BUILD_MODE=RELEASE RAYLIB_LIBTYPE=STATIC ARCH=${{ matrix.arch }}
 
-      - name: Package
+      - name: Generate Artifacts
         run: |
-          mkdir release
-          cp src/${{ env.PROJECT_NAME }} release/
-          cp -r resources release/
-          7z a ${{ env.PROJECT_NAME }}_linux_${{ matrix.arch }}.zip ./release/*
+          cp ${{ env.PROJECT_BUILD_PATH }}/${{ env.PROJECT_NAME }} ${{ env.PROJECT_RELEASE_PATH }}
+          cp -r ${{ env.PROJECT_NAME }}/${{ env.PROJECT_RESOURCES_PATH }} ${{ env.PROJECT_RELEASE_PATH }}
+          cp ${{ env.PROJECT_NAME }}/README.md ${{ env.PROJECT_RELEASE_PATH }}
+          cp ${{ env.PROJECT_NAME }}/LICENSE ${{ env.PROJECT_RELEASE_PATH }}
+          7z a ./${{ env.PROJECT_RELEASE_PATH }}.zip ./${{ env.PROJECT_RELEASE_PATH }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PROJECT_RELEASE_PATH }}.zip
+          path: ./${{ env.PROJECT_RELEASE_PATH }}.zip
+
+      - name: Upload Artifact to Release
+        if: github.event_name == 'release' && github.event.action == 'published'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.PROJECT_RELEASE_PATH }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

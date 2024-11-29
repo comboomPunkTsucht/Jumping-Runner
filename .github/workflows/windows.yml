@@ -6,28 +6,75 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write
+    runs-on: windows-latest
     strategy:
       matrix:
         arch: [x64, arm64]
-    runs-on: windows-latest
     env:
       PROJECT_NAME: ${{ github.event.repository.name }}
-      ARCH: ${{ matrix.arch }}
+      PROJECT_BUILD_PATH: "${{ github.event.repository.name }}\\src"
+      PROJECT_RELEASE_PATH: ${{ github.event.repository.name }}_dev_win_${{ matrix.arch }}
+      PROJECT_RESOURCES_PATH: resources
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: microsoft/setup-msbuild@v2
+      - name: Checkout this repo
+        uses: actions/checkout@master
+        with:
+          path: ${{ env.PROJECT_NAME }}
+
+      - name: Setup Release Paths
+        if: github.event_name == 'release' && github.event.action == 'published'
+        run: |
+          echo "PROJECT_RELEASE_PATH=${{ env.PROJECT_NAME }}_v${{ github.event.release.tag_name }}_win_${{ matrix.arch }}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Setup Environment
+        run: |
+          mkdir ${{ env.PROJECT_RELEASE_PATH }}
+        shell: cmd
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Clean Previous Builds
+        run: |
+          cd ${{ env.PROJECT_BUILD_PATH }}
+          make clean PLATFORM=PLATFORM_DESKTOP
+          del /F /Q ${{ env.PROJECT_NAME }}.* *.o *.a *.dll *.exe *.dylib *.so 2>nul
+        shell: cmd
 
       - name: Build Project
         run: |
-          cd src
-          make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=STATIC ARCH=${{ matrix.arch }}
+          cd ${{ env.PROJECT_BUILD_PATH }}
+          make PLATFORM=PLATFORM_DESKTOP BUILD_MODE=RELEASE RAYLIB_LIBTYPE=STATIC ARCH=${{ matrix.arch }}
+        shell: cmd
 
-      - name: Package
+      - name: Generate Artifacts
         run: |
-          mkdir release
-          cp src/${{ env.PROJECT_NAME }}.exe release/
-          cp -r resources release/
-          7z a ${{ env.PROJECT_NAME }}_windows_${{ matrix.arch }}.zip ./release/*
+          copy /Y ${{ env.PROJECT_BUILD_PATH }}\${{ env.PROJECT_NAME }}.exe ${{ env.PROJECT_RELEASE_PATH }}
+          xcopy ${{ env.PROJECT_NAME }}\${{ env.PROJECT_RESOURCES_PATH }} ${{ env.PROJECT_RELEASE_PATH }}\${{ env.PROJECT_RESOURCES_PATH }} /s /e /i
+          copy /Y ${{ env.PROJECT_NAME }}\README.md ${{ env.PROJECT_RELEASE_PATH }}
+          copy /Y ${{ env.PROJECT_NAME }}\LICENSE ${{ env.PROJECT_RELEASE_PATH }}
+          7z a .\${{ env.PROJECT_RELEASE_PATH }}.zip .\${{ env.PROJECT_RELEASE_PATH }}
+        shell: cmd
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PROJECT_RELEASE_PATH }}.zip
+          path: ./${{ env.PROJECT_RELEASE_PATH }}.zip
+
+      - name: Upload Artifact to Release
+        if: github.event_name == 'release' && github.event.action == 'published'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.PROJECT_RELEASE_PATH }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
