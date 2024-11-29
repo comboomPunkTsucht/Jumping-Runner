@@ -22,7 +22,7 @@ jobs:
       PROJECT_BUILD_PATH: ${{ github.event.repository.name }}/src
       PROJECT_RELEASE_PATH: ${{ github.event.repository.name }}_dev_linux_${{ matrix.arch }}
       PROJECT_RESOURCES_PATH: resources
-      RAYLIB_PATH: src/external/raylib/src
+      RAYLIB_PATH: external/raylib/src
 
     steps:
       - name: Checkout this repo
@@ -44,7 +44,7 @@ jobs:
       - name: Build Project
         run: |
           cd ${{ env.PROJECT_BUILD_PATH }}
-          make PLATFORM=PLATFORM_DESKTOP BUILD_MODE=RELEASE RAYLIB_LIBTYPE=STATIC RAYLIB_PATH=${{ env.RAYLIB_PATH }} ARCH=${{ matrix.arch }}
+          make PLATFORM=PLATFORM_DESKTOP BUILD_MODE=RELEASE RAYLIB_LIBTYPE=STATIC ARCH=${{ matrix.arch }}
 
       - name: Generate Artifacts
         run: |

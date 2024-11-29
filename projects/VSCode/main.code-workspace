@@ -24,6 +24,7 @@
 			"*.cpp": "cpp",
 			"*.h": "c",
 			"*.hpp": "cpp",
+			"vector": "cpp"
 		},
 		"files.autoSave": "onFocusChange"
 	}

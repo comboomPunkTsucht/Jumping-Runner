@@ -22,7 +22,7 @@ jobs:
       PROJECT_BUILD_PATH: ${{ github.event.repository.name }}/src
       PROJECT_RELEASE_PATH: ${{ github.event.repository.name }}_dev_macos_${{ matrix.arch }}
       PROJECT_RESOURCES_PATH: resources
-      RAYLIB_PATH: src/external/raylib/src
+      RAYLIB_PATH: external/raylib/src
 
     steps:
       - name: Checkout this repo
@@ -42,12 +42,16 @@ jobs:
       - name: Build Project
         run: |
           cd ${{ env.PROJECT_BUILD_PATH }}
-          make PLATFORM=PLATFORM_DESKTOP BUILD_MODE=RELEASE RAYLIB_LIBTYPE=STATIC RAYLIB_PATH=${{ env.RAYLIB_PATH }} ARCH=${{ matrix.arch }}
+          make PLATFORM=PLATFORM_DESKTOP BUILD_MODE=RELEASE RAYLIB_LIBTYPE=STATIC ARCH=${{ matrix.arch }}
 
       - name: Generate Artifacts
         run: |
-          cp ${{ env.PROJECT_BUILD_PATH }}/${{ env.PROJECT_NAME }} ${{ env.PROJECT_RELEASE_PATH }}/${{ env.PROJECT_NAME }}.app/Contents/MacOS/
-          cp ${{ env.PROJECT_NAME }}/src/${{ env.PROJECT_NAME }}.icns ${{ env.PROJECT_RELEASE_PATH }}/${{ env.PROJECT_NAME }}.app/Contents/Resources/
+          if [ -f "${{ env.PROJECT_BUILD_PATH }}/${{ env.PROJECT_NAME }}" ]; then
+            cp ${{ env.PROJECT_BUILD_PATH }}/${{ env.PROJECT_NAME }} ${{ env.PROJECT_RELEASE_PATH }}/${{ env.PROJECT_NAME }}.app/Contents/MacOS/
+          fi
+          if [ -f "${{ env.PROJECT_NAME }}/src/${{ env.PROJECT_NAME }}.icns" ]; then
+            cp ${{ env.PROJECT_NAME }}/src/${{ env.PROJECT_NAME }}.icns ${{ env.PROJECT_RELEASE_PATH }}/${{ env.PROJECT_NAME }}.app/Contents/Resources/
+          fi
           cp ${{ env.PROJECT_NAME }}/src/Info.plist ${{ env.PROJECT_RELEASE_PATH }}/${{ env.PROJECT_NAME }}.app/Contents/
           cp -r ${{ env.PROJECT_NAME }}/${{ env.PROJECT_RESOURCES_PATH }} ${{ env.PROJECT_RELEASE_PATH }}/${{ env.PROJECT_NAME }}.app/Contents/
           cp ${{ env.PROJECT_NAME }}/README.md ${{ env.PROJECT_RELEASE_PATH }}/
