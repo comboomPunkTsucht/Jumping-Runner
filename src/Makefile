@@ -322,12 +322,14 @@ all:
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
 	@echo "Building raylib..."
-	$(MAKE) -C $(RAYLIB_LIB_PATH) RAYLIB_LIBTYPE=SHARED RAYLIB_RELEASE_PATH=$(PROJECT_BUILD_PATH) PLATFORM=$(PLATFORM)
+	$(MAKE) -C $(RAYLIB_LIB_PATH) RAYLIB_LIBTYPE=$(RAYLIB_LIBTYPE) RAYLIB_RELEASE_PATH=$(PROJECT_BUILD_PATH) PLATFORM=$(PLATFORM)
 	@echo "Building $(PROJECT_NAME)..."
 	$(CC) -o $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)$(EXT) $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 ifeq ($(PLATFORM_OS),OSX)
-	@echo "Setting up runtime path for macOS..."
-	install_name_tool -add_rpath "$(PROJECT_BUILD_PATH)" $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)
+    ifeq ($(RAYLIB_LIBTYPE),SHARED)
+	    @echo "Setting up runtime path for macOS..."
+	    install_name_tool -add_rpath "$(PROJECT_BUILD_PATH)" $(PROJECT_BUILD_PATH)/$(PROJECT_NAME)
+    endif
 endif
 
 
