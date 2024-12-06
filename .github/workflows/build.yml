@@ -28,7 +28,6 @@ jobs:
 
     - name: Build
       run: |
-        cd ..
         git submodule update --init --recursive
         cd src
         make
