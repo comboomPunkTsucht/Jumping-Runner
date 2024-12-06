@@ -33,7 +33,7 @@ PROJECT_NAME          ?= jumping-runner
 PROJECT_VERSION       ?= 1.0
 PROJECT_BUILD_PATH    ?= $(shell pwd)
 PROJECT_SOURCE_FILES  ?= jumping-runner.cpp
-PROJECT_CUSTOM_FLAGS  = -std=c++17 -lc++
+PROJECT_CUSTOM_FLAGS  = -std=c++17 -lc++ -lm
 
 RAYLIB_SRC_PATH       ?= $(PROJECT_BUILD_PATH)/external/raylib/src
 RAYLIB_INCLUDE_PATH   ?= $(RAYLIB_SRC_PATH)

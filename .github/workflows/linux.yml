@@ -49,7 +49,7 @@ jobs:
       - name: Build Project
         run: |
           cd ${{ env.PROJECT_BUILD_PATH }}
-          make ARCH=${{ matrix.arch }}
+          make
 
       - name: Generate Artifacts
         run: |
