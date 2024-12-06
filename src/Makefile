@@ -40,7 +40,7 @@ RAYLIB_INCLUDE_PATH   ?= $(RAYLIB_SRC_PATH)
 RAYLIB_LIB_PATH       ?= $(RAYLIB_SRC_PATH)
 
 # Library type used for raylib: STATIC (.a) or SHARED (.so/.dll)
-RAYLIB_LIBTYPE        ?= SHARED
+RAYLIB_LIBTYPE        ?= STATIC
 
 # Define compiler path on Windows
 COMPILER_PATH         ?= /Applications/Xcode.app/Contents/Developer/usr/bin
@@ -49,13 +49,13 @@ COMPILER_PATH         ?= /Applications/Xcode.app/Contents/Developer/usr/bin
 BUILD_MODE            ?= RELEASE
 
 # PLATFORM_WEB: Default properties
-BUILD_WEB_ASYNCIFY    ?= FALSE
+BUILD_WEB_ASYNCIFY    ?= TRUE
 BUILD_WEB_SHELL       ?= minshell.html
 BUILD_WEB_HEAP_SIZE   ?= 128MB
 BUILD_WEB_STACK_SIZE  ?= 1MB
 BUILD_WEB_ASYNCIFY_STACK_SIZE ?= 1048576
-BUILD_WEB_RESOURCES   ?= FALSE
-BUILD_WEB_RESOURCES_PATH  ?= resources
+BUILD_WEB_RESOURCES   ?= TRUE
+BUILD_WEB_RESOURCES_PATH  ?= web_resources
 
 # Determine PLATFORM_OS in case PLATFORM_DESKTOP selected
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
