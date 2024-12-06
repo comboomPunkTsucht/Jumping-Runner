@@ -24,7 +24,9 @@
 			"*.cpp": "cpp",
 			"*.h": "c",
 			"*.hpp": "cpp",
-			"vector": "cpp"
+			"*.yaml": "yaml",
+			"*.yml": "yaml"
+
 		},
 		"files.autoSave": "onFocusChange"
 	}
