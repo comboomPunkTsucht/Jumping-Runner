@@ -32,7 +32,7 @@ PLATFORM              ?= PLATFORM_DESKTOP
 PROJECT_NAME          ?= jumping-runner
 PROJECT_VERSION       ?= 1.0
 PROJECT_BUILD_PATH    ?= $(shell pwd)
-PROJECT_SOURCE_FILES  ?= jumping-runner.cpp
+PROJECT_SOURCE_FILES  ?= jumping-runner.cpp game.cpp
 PROJECT_CUSTOM_FLAGS  = -std=c++17 -lc++ -lm
 
 RAYLIB_SRC_PATH       ?= $(PROJECT_BUILD_PATH)/external/raylib/src
@@ -153,7 +153,7 @@ endif
 #  -Wno-missing-braces  ignore invalid warning (GCC bug 53119)
 #  -Wno-unused-value    ignore unused return values of some functions (i.e. fread())
 #  -D_DEFAULT_SOURCE    use with -std=c99 on Linux and PLATFORM_WEB, required for timespec
-CFLAGS = -Wall -D_DEFAULT_SOURCE -Wno-missing-braces -Wno-unused-value  $(PROJECT_CUSTOM_FLAGS) # -Wno-pointer-sign -std=c99
+CFLAGS = -Wall -D_DEFAULT_SOURCE -Wno-missing-braces -Wno-unused-value $(PROJECT_CUSTOM_FLAGS) -Wno-pointer-sign
 
 #CFLAGS += -Wextra -Wmissing-prototypes -Wstrict-prototypes
 
